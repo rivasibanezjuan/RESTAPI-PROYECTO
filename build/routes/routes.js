@@ -76,6 +76,126 @@ class Routes {
                 .catch((err) => res.send('Error: ' + err));
             yield database_1.db.desconectarBD();
         });
+        this.postTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id_test, nombre, dni, telefono, email, fecha_n, sintomas, sanidad, fecha_t, tipo_test, resultado, localidad, calle, ingreso, activo } = req.body;
+            yield database_1.db.conectarBD();
+            const dSchema = {
+                _id_test: id_test,
+                _nombre: nombre,
+                _dni: dni,
+                _telefono: telefono,
+                _email: email,
+                _fecha_n: fecha_n,
+                _sintomas: sintomas,
+                _sanidad: sanidad,
+                _fecha_t: fecha_t,
+                _tipo_test: tipo_test,
+                _resultado: resultado,
+                _localidad: localidad,
+                _calle: calle,
+                _ingreso: ingreso,
+                _activo: activo,
+            };
+            const oSchema = new schemas_1.Tests(dSchema);
+            yield oSchema.save()
+                .then((doc) => res.send(doc))
+                .catch((err) => res.send('Error: ' + err));
+            yield database_1.db.desconectarBD();
+        });
+        this.actualizaLocalidad = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id_loc } = req.params;
+            const { nombre, comunidad, provincia, poblacion } = req.body;
+            yield database_1.db.conectarBD();
+            yield schemas_1.Localidades.findOneAndUpdate({ _id_loc: id_loc }, {
+                _nombre: nombre,
+                _comunidad: comunidad,
+                _provincia: provincia,
+                _poblacion: poblacion,
+            }, {
+                new: true,
+                runValidators: true
+            })
+                .then((docu) => {
+                if (docu == null) {
+                    console.log('La localidad que desea modificar no existe');
+                    res.json({ "Error": "No existe: " + id_loc });
+                }
+                else {
+                    console.log('Modificada Correctamente: ' + docu);
+                    res.json(docu);
+                }
+            })
+                .catch((err) => {
+                console.log('Error: ' + err);
+                res.json({ error: 'Error: ' + err });
+            });
+            database_1.db.desconectarBD();
+        });
+        this.actualizaTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id_test } = req.params;
+            const { nombre, dni, telefono, email, fecha_n, sintomas, sanidad, fecha_t, tipo_test, resultado, localidad, calle, ingreso, activo } = req.body;
+            yield database_1.db.conectarBD();
+            yield schemas_1.Tests.findOneAndUpdate({ _id_test: id_test }, {
+                _nombre: nombre,
+                _dni: dni,
+                _telefono: telefono,
+                _email: email,
+                _fecha_n: fecha_n,
+                _sintomas: sintomas,
+                _sanidad: sanidad,
+                _fecha_t: fecha_t,
+                _tipo_test: tipo_test,
+                _resultado: resultado,
+                _localidad: localidad,
+                _calle: calle,
+                _ingreso: ingreso,
+                _activo: activo,
+            }, {
+                new: true,
+                runValidators: true
+            })
+                .then((docu) => {
+                if (docu == null) {
+                    console.log('La localidad que desea modificar no existe');
+                    res.json({ "Error": "No existe: " + id_test });
+                }
+                else {
+                    console.log('Modificada Correctamente: ' + docu);
+                    res.json(docu);
+                }
+            })
+                .catch((err) => {
+                console.log('Error: ' + err);
+                res.json({ error: 'Error: ' + err });
+            });
+            database_1.db.desconectarBD();
+        });
+        this.getPoblacion = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { comunidad } = req.params;
+            yield database_1.db.conectarBD()
+                .then(() => __awaiter(this, void 0, void 0, function* () {
+                const query = yield schemas_1.Localidades.aggregate([
+                    {
+                        $match: {
+                            _comunidad: comunidad
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: comunidad,
+                            _media_poblacion: {
+                                $avg: "$_poblacion"
+                            }
+                        }
+                    }
+                ]);
+                res.json(query);
+            }))
+                .catch((mensaje) => {
+                res.send(mensaje);
+            });
+            yield database_1.db.desconectarBD();
+        });
         this._router = express_1.Router();
     }
     get router() {
@@ -84,7 +204,11 @@ class Routes {
     misRutas() {
         this._router.get('/localidades', this.getLocalidades),
             this._router.get('/localidad/:id_loc', this.getLocalidad),
-            this._router.post('/', this.postLocalidad);
+            this._router.post('/postlocalidad', this.postLocalidad);
+        this._router.post('/posttest', this.postTest);
+        this._router.post('/actualizaLocalidad/:id_loc', this.actualizaLocalidad);
+        this._router.post('/actualizaTest/:id_test', this.actualizaTest);
+        this._router.get('/poblacion/:comunidad', this.getPoblacion);
     }
 }
 const obj = new Routes();
