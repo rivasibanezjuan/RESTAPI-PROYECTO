@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tests = exports.Localidades = void 0;
 const mongoose_1 = require("mongoose");
+// Esquema de nuestra colección 'localidades'
 const LocalidadSchema = new mongoose_1.Schema({
     _nombre: String,
     _id_loc: String,
@@ -11,8 +12,9 @@ const LocalidadSchema = new mongoose_1.Schema({
 }, {
     collection: 'localidades'
 });
+// Esquema de nuestra colección 'tests'
 const TestSchema = new mongoose_1.Schema({
-    _id_test: Number,
+    _id_test: String,
     _nombre: String,
     _dni: String,
     _telefono: Number,
@@ -30,5 +32,6 @@ const TestSchema = new mongoose_1.Schema({
 }, {
     collection: 'tests'
 });
+// Realizamos los exports de ambas colecciones
 exports.Localidades = mongoose_1.model('localidades', LocalidadSchema);
 exports.Tests = mongoose_1.model('tests', TestSchema);

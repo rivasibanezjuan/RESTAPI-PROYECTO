@@ -1,3 +1,3 @@
-# Juan
+# Juan Rivas Ibáñez
 
-// Aun por desarrollar
+Hemos desarrollado un proyecto que cuenta con dos colecciones de una base de datos mongodb, una colección 'localidades' y otra colección 'tests', se tratan de tests realizados para la detección del covid-19, en la colección localidades cada documento es una localidad, relacionamos ambas colecciones ya que la colección 'tests' posee un campo llamado localidad, hacemos un aggregate y las relacionamos con este último campo y el campo nombre de la colección 'localidades'. Cada test que se le ha realizado a una persona lo agrupamos en torno a la localidad de la misma, lo cual nos permite calcular la incidencia del virus, etc en cada localidad, como la colección localidad posee los campos provincia y comunidad, podemos hacer un estudio también del estado de cada provincia y cada comunidad autónoma.

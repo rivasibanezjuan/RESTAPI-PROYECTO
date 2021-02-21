@@ -15,6 +15,24 @@ const schemas_1 = require("../model/schemas");
 const database_1 = require("../database/database");
 class Routes {
     constructor() {
+        // Mostramos un test en concreto a través del identificador id_test
+        this.getTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id_test } = req.params;
+            yield database_1.db.conectarBD();
+            const p = yield schemas_1.Tests.find({ _id_test: id_test });
+            // concatenando con cadena muestra mensaje
+            yield database_1.db.desconectarBD();
+            res.json(p);
+        });
+        // Mostramos una localidad en concreto a través del identificador id_loc
+        this.getLocalidad2 = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id_loc } = req.params;
+            yield database_1.db.conectarBD();
+            const p = yield schemas_1.Localidades.find({ _id_loc: id_loc });
+            yield database_1.db.desconectarBD();
+            res.json(p);
+        });
+        // Obtenemos las localidades con los respectivos tests de la población local
         this.getLocalidades = (req, res) => __awaiter(this, void 0, void 0, function* () {
             yield database_1.db.conectarBD()
                 .then(() => __awaiter(this, void 0, void 0, function* () {
@@ -35,6 +53,7 @@ class Routes {
             });
             yield database_1.db.desconectarBD();
         });
+        // Obtenemos los tests de una localidad en concreto usando el identificador id_loc
         this.getLocalidad = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id_loc } = req.params;
             yield database_1.db.conectarBD()
@@ -60,6 +79,7 @@ class Routes {
             });
             yield database_1.db.desconectarBD();
         });
+        // Realizamos un post de una localidad
         this.postLocalidad = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { nombre, id_loc, comunidad, provincia, poblacion } = req.body;
             yield database_1.db.conectarBD();
@@ -76,6 +96,7 @@ class Routes {
                 .catch((err) => res.send('Error: ' + err));
             yield database_1.db.desconectarBD();
         });
+        // Realizamos un post de un test
         this.postTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id_test, nombre, dni, telefono, email, fecha_n, sintomas, sanidad, fecha_t, tipo_test, resultado, localidad, calle, ingreso, activo } = req.body;
             yield database_1.db.conectarBD();
@@ -85,10 +106,10 @@ class Routes {
                 _dni: dni,
                 _telefono: telefono,
                 _email: email,
-                _fecha_n: fecha_n,
+                _fecha_n: new Date(fecha_n),
                 _sintomas: sintomas,
                 _sanidad: sanidad,
-                _fecha_t: fecha_t,
+                _fecha_t: new Date(fecha_t),
                 _tipo_test: tipo_test,
                 _resultado: resultado,
                 _localidad: localidad,
@@ -102,6 +123,7 @@ class Routes {
                 .catch((err) => res.send('Error: ' + err));
             yield database_1.db.desconectarBD();
         });
+        // Actualizamos una localidad en concreto, para ello nos servimos del identificador id_loc
         this.actualizaLocalidad = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id_loc } = req.params;
             const { nombre, comunidad, provincia, poblacion } = req.body;
@@ -131,6 +153,7 @@ class Routes {
             });
             database_1.db.desconectarBD();
         });
+        // Actualizamos un test en concreto, para ello nos servimos del identificador id_test
         this.actualizaTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id_test } = req.params;
             const { nombre, dni, telefono, email, fecha_n, sintomas, sanidad, fecha_t, tipo_test, resultado, localidad, calle, ingreso, activo } = req.body;
@@ -170,6 +193,7 @@ class Routes {
             });
             database_1.db.desconectarBD();
         });
+        // Obtenemos la media de poblacion de una comunidad autonoma
         this.getPoblacion = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { comunidad } = req.params;
             yield database_1.db.conectarBD()
@@ -202,6 +226,8 @@ class Routes {
         return this._router;
     }
     misRutas() {
+        this._router.get('/getTest/:id_loc', this.getTest);
+        this._router.get('/getLocalidad/:id_test', this.getLocalidad2);
         this._router.get('/localidades', this.getLocalidades),
             this._router.get('/localidad/:id_loc', this.getLocalidad),
             this._router.post('/postlocalidad', this.postLocalidad);

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+// Introducimos el link a nuestra base de datos donde almacenaremos las dos colecciones
 class DataBase {
     constructor() {
         this._cadenaConexion = 'mongodb+srv://admin:12345@cluster0.5mbvb.mongodb.net/covid?retryWrites=true&w=majority';
