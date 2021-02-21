@@ -60,7 +60,7 @@ class Routes {
                             from: 'tests',
                             localField: '_nombre',
                             foreignField: '_localidad',
-                            as: "_test_localidad"
+                            as: "_tests"
                         }
                     }
                 ]);
@@ -82,7 +82,7 @@ class Routes {
                             from: 'tests',
                             localField: '_nombre',
                             foreignField: '_localidad',
-                            as: "_test_localidad"
+                            as: "_tests"
                         }
                     }, {
                         $match: {
