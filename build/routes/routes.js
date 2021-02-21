@@ -226,8 +226,8 @@ class Routes {
         return this._router;
     }
     misRutas() {
-        this._router.get('/getTest/:id_loc', this.getTest);
-        this._router.get('/getLocalidad/:id_test', this.getLocalidad2);
+        this._router.get('/getTest/:id_test', this.getTest);
+        this._router.get('/getLocalidad/:id_loc', this.getLocalidad2);
         this._router.get('/localidades', this.getLocalidades),
             this._router.get('/localidad/:id_loc', this.getLocalidad),
             this._router.post('/postlocalidad', this.postLocalidad);
