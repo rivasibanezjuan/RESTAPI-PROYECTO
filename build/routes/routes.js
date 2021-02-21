@@ -15,6 +15,24 @@ const schemas_1 = require("../model/schemas");
 const database_1 = require("../database/database");
 class Routes {
     constructor() {
+        // Mostramos la colección 'tests'
+        this.getTests = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const {} = req.params;
+            yield database_1.db.conectarBD();
+            const p = yield schemas_1.Tests.find();
+            // concatenando con cadena muestra mensaje
+            yield database_1.db.desconectarBD();
+            res.json(p);
+        });
+        // Mostramos la colección 'localidades'
+        this.getLocalidades = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const {} = req.params;
+            yield database_1.db.conectarBD();
+            const p = yield schemas_1.Localidades.find();
+            // concatenando con cadena muestra mensaje
+            yield database_1.db.desconectarBD();
+            res.json(p);
+        });
         // Mostramos un test en concreto a través del identificador id_test
         this.getTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id_test } = req.params;
@@ -33,7 +51,7 @@ class Routes {
             res.json(p);
         });
         // Obtenemos las localidades con los respectivos tests de la población local
-        this.getLocalidades = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getTestsLocalidades = (req, res) => __awaiter(this, void 0, void 0, function* () {
             yield database_1.db.conectarBD()
                 .then(() => __awaiter(this, void 0, void 0, function* () {
                 const query = yield schemas_1.Localidades.aggregate([
@@ -54,7 +72,7 @@ class Routes {
             yield database_1.db.desconectarBD();
         });
         // Obtenemos los tests de una localidad en concreto usando el identificador id_loc
-        this.getLocalidad = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.getTestsLocalidad = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id_loc } = req.params;
             yield database_1.db.conectarBD()
                 .then(() => __awaiter(this, void 0, void 0, function* () {
@@ -226,10 +244,12 @@ class Routes {
         return this._router;
     }
     misRutas() {
+        this._router.get('/getTests', this.getTests);
+        this._router.get('/getLocalidades', this.getLocalidades);
         this._router.get('/getTest/:id_test', this.getTest);
         this._router.get('/getLocalidad/:id_loc', this.getLocalidad2);
-        this._router.get('/localidades', this.getLocalidades),
-            this._router.get('/localidad/:id_loc', this.getLocalidad),
+        this._router.get('/testslocalidades', this.getTestsLocalidades),
+            this._router.get('/testslocalidad/:id_loc', this.getTestsLocalidad),
             this._router.post('/postlocalidad', this.postLocalidad);
         this._router.post('/posttest', this.postTest);
         this._router.post('/actualizaLocalidad/:id_loc', this.actualizaLocalidad);

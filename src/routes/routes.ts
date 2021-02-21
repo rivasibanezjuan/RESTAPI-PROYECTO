@@ -12,6 +12,30 @@ class Routes {
         return this._router
     }
 
+    // Mostramos la colección 'tests'
+
+    private getTests = async (req: Request, res: Response) => {
+        const{} = req.params
+        await db.conectarBD()
+        const p = await Tests.find(
+            )
+             // concatenando con cadena muestra mensaje
+        await db.desconectarBD()
+        res.json(p)
+    }
+
+    // Mostramos la colección 'localidades'
+
+    private getLocalidades = async (req: Request, res: Response) => {
+        const{} = req.params
+        await db.conectarBD()
+        const p = await Localidades.find(
+            )
+             // concatenando con cadena muestra mensaje
+        await db.desconectarBD()
+        res.json(p)
+    }
+
     // Mostramos un test en concreto a través del identificador id_test
 
     private getTest = async (req: Request, res: Response) => {
@@ -39,7 +63,7 @@ class Routes {
 
 // Obtenemos las localidades con los respectivos tests de la población local
 
-    private getLocalidades = async (req:Request, res: Response) => {
+    private getTestsLocalidades = async (req:Request, res: Response) => {
         await db.conectarBD()
         .then( async ()=> {
             const query = await Localidades.aggregate([
@@ -62,7 +86,7 @@ class Routes {
 
     // Obtenemos los tests de una localidad en concreto usando el identificador id_loc
 
-    private getLocalidad = async (req:Request, res: Response) => {
+    private getTestsLocalidad = async (req:Request, res: Response) => {
        const { id_loc } = req.params
         await db.conectarBD()
         .then( async ()=> {
@@ -256,10 +280,12 @@ class Routes {
      }
     
     misRutas(){
+        this._router.get('/getTests', this.getTests)
+        this._router.get('/getLocalidades', this.getLocalidades)
         this._router.get('/getTest/:id_test', this.getTest)
         this._router.get('/getLocalidad/:id_loc', this.getLocalidad2)
-        this._router.get('/localidades', this.getLocalidades),
-        this._router.get('/localidad/:id_loc', this.getLocalidad),
+        this._router.get('/testslocalidades', this.getTestsLocalidades),
+        this._router.get('/testslocalidad/:id_loc', this.getTestsLocalidad),
         this._router.post('/postlocalidad', this.postLocalidad)
         this._router.post('/posttest', this.postTest)
         this._router.post('/actualizaLocalidad/:id_loc', this.actualizaLocalidad)
