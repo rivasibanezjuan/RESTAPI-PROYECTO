@@ -29,7 +29,10 @@ class Routes {
     private getLocalidades = async (req: Request, res: Response) => {
         const{} = req.params
         await db.conectarBD()
-        const p = await Localidades.find(
+        const p = await Localidades.findOne(
+            { _id_loc
+                :
+                "MLG"}
             )
              // concatenando con cadena muestra mensaje
         await db.desconectarBD()
@@ -247,6 +250,19 @@ class Routes {
         db.desconectarBD()
     }
 
+    private delete = async (req: Request, res: Response) => {
+        const { id_loc } = req.params
+        console.log(id_loc)
+        await db.conectarBD()
+        await Localidades.findOneAndDelete( { _id_loc: id_loc } )
+        .then(
+            (doc: any) => {
+                console.log(doc)
+                res.json(doc)
+            }) 
+        db.desconectarBD()
+    }
+
     // Obtenemos la media de poblacion de una comunidad autonoma
 
     private getPoblacion = async (req:Request, res: Response) => {
@@ -291,6 +307,7 @@ class Routes {
         this._router.post('/actualizaLocalidad/:id_loc', this.actualizaLocalidad)
         this._router.post('/actualizaTest/:id_test', this.actualizaTest)
         this._router.get('/poblacion/:comunidad', this.getPoblacion)
+        this._router.delete('/delete/:id_loc', this.delete)
     }
 }
 

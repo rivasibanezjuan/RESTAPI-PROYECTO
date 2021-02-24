@@ -28,7 +28,7 @@ class Routes {
         this.getLocalidades = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const {} = req.params;
             yield database_1.db.conectarBD();
-            const p = yield schemas_1.Localidades.find();
+            const p = yield schemas_1.Localidades.findOne({ _id_loc: "MLG" });
             // concatenando con cadena muestra mensaje
             yield database_1.db.desconectarBD();
             res.json(p);
@@ -211,6 +211,17 @@ class Routes {
             });
             database_1.db.desconectarBD();
         });
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { id_loc } = req.params;
+            console.log(id_loc);
+            yield database_1.db.conectarBD();
+            yield schemas_1.Localidades.findOneAndDelete({ _id_loc: id_loc })
+                .then((doc) => {
+                console.log(doc);
+                res.json(doc);
+            });
+            database_1.db.desconectarBD();
+        });
         // Obtenemos la media de poblacion de una comunidad autonoma
         this.getPoblacion = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { comunidad } = req.params;
@@ -255,6 +266,7 @@ class Routes {
         this._router.post('/actualizaLocalidad/:id_loc', this.actualizaLocalidad);
         this._router.post('/actualizaTest/:id_test', this.actualizaTest);
         this._router.get('/poblacion/:comunidad', this.getPoblacion);
+        this._router.delete('/delete/:id_loc', this.delete);
     }
 }
 const obj = new Routes();
